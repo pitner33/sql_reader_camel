@@ -1,0 +1,19 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+    <route>
+        <from uri="timer://Timer?Period=60000"/>
+        <setBody>
+            <constant>select * from Example</constant>
+        </setBody>
+        <to uri="jdbc:datasource"/>
+        <split>
+            <simple>${body}</simple>
+            <to uri="direct:logRows"/>
+        </split>
+
+    </route>
+    <route>
+        <from uri="direct:logRows"/>
+        <log message="${body}"/>
+<!--        <to uri="file:/home/sol/workspace/dummies/190626_sql_reader_camel/fileOut?fileName=result.txt"/>-->
+    </route>
+</routes>
